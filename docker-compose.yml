@@ -1,17 +1,19 @@
 version: '3.7'
 
 services:
-  db:
+  postgres:
     container_name: postgres
-    image: postgres:12
+    image: postgres:15
     env_file:
       - .development.env
     environment:
-      PG_DATA: /var/lib/postgresql/data
+      POSTGRES_USER: duke
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: nestdb
     ports:
       - 5432:5432
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
     restart: always
 
   app:
@@ -28,8 +30,8 @@ services:
       - 9229:9229
     command: npm run start:dev
     depends_on:
-      - db
+      - postgres
     restart: always
 
 volumes:
-  pgdata:
+  postgres-data:
